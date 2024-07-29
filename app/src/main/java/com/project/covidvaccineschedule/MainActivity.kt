@@ -15,16 +15,26 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -66,6 +77,9 @@ fun App(){
         }
         composable(route = "register" ){
             RegisterScreen()
+        }
+        composable(route = "mainScreen"){
+            MainScreenActivity()
         }
     }
 }
@@ -172,14 +186,14 @@ fun LoginScreen(navController: NavController){
 
                 Button(
                     onClick = {
-
+                        navController.navigate("mainScreen")
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 20.dp)
                         .clip(RoundedCornerShape(8.dp)),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF00a57a) 
+                        containerColor = Color(0xFF00a57a)
                     )
                 ) {
                     Text(
@@ -290,10 +304,10 @@ fun RegisterScreen(){
                         textStyle = TextStyle.Default.copy(color = Color.Black),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             containerColor = Color.White,
-                            focusedBorderColor = Color(0xFF00a57a), // Customize focused border color if needed
-                            unfocusedBorderColor = Color.LightGray // Customize unfocused border color if needed
+                            focusedBorderColor = Color(0xFF00a57a),
+                            unfocusedBorderColor = Color.LightGray
                         ),
-                        singleLine = true, // Set to false if multiline input is needed
+                        singleLine = true,
                         shape = RoundedCornerShape(8.dp)
                     )
 
@@ -315,10 +329,10 @@ fun RegisterScreen(){
                             .clip(RoundedCornerShape(8.dp)),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             containerColor = Color.White,
-                            focusedBorderColor = Color(0xFF00a57a), // Customize focused border color if needed
-                            unfocusedBorderColor = Color.LightGray // Customize unfocused border color if needed
+                            focusedBorderColor = Color(0xFF00a57a),
+                            unfocusedBorderColor = Color.LightGray
                         ),
-                        singleLine = true, // Set to false if multiline input is needed
+                        singleLine = true,
                         shape = RoundedCornerShape(8.dp)
                     )
 
@@ -340,11 +354,11 @@ fun RegisterScreen(){
                             .clip(RoundedCornerShape(8.dp)),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             containerColor = Color.White,
-                            focusedBorderColor = Color(0xFF00a57a), // Customize focused border color if needed
-                            unfocusedBorderColor = Color.LightGray // Customize unfocused border color if needed
+                            focusedBorderColor = Color(0xFF00a57a),
+                            unfocusedBorderColor = Color.LightGray
                         ),
                         visualTransformation = PasswordVisualTransformation(),
-                        singleLine = true, // Set to false if multiline input is needed
+                        singleLine = true,
                         shape = RoundedCornerShape(8.dp)
                     )
                     Text(
@@ -365,11 +379,11 @@ fun RegisterScreen(){
                             .clip(RoundedCornerShape(8.dp)),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             containerColor = Color.White,
-                            focusedBorderColor = Color(0xFF00a57a), // Customize focused border color if needed
-                            unfocusedBorderColor = Color.LightGray // Customize unfocused border color if needed
+                            focusedBorderColor = Color(0xFF00a57a),
+                            unfocusedBorderColor = Color.LightGray
                         ),
                         visualTransformation = PasswordVisualTransformation(),
-                        singleLine = true, // Set to false if multiline input is needed
+                        singleLine = true,
                         shape = RoundedCornerShape(8.dp)
                     )
 
@@ -383,7 +397,7 @@ fun RegisterScreen(){
                             .padding(vertical = 20.dp)
                             .clip(RoundedCornerShape(8.dp)),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF00a57a) // Green color for the button background
+                            containerColor = Color(0xFF00a57a)
                         )
                     ) {
                         Text(
@@ -396,5 +410,100 @@ fun RegisterScreen(){
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun MainScreenActivity(){
+    val navController = rememberNavController()
+    val selected = remember {
+        mutableStateOf(Icons.Default.Home)
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = "Venkata Ramana Medi Care" , fontSize = 20.sp) },
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+
+        bottomBar = {
+            BottomAppBar(containerColor = Color(0xFF00a57a), modifier = Modifier.height(55.dp)) {
+                IconButton(
+                    onClick = {
+                        selected.value = Icons.Default.Home
+                        navController.navigate(FScreens.Home.screens) {
+                            popUpTo(navController.graph.startDestinationId)
+                            launchSingleTop = true
+                        }
+                    },
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Icon(
+                        Icons.Default.Home,
+                        contentDescription = null,
+                        modifier = Modifier.size(26.dp),
+                        tint = if (selected.value == Icons.Default.Home) Color.White else Color(
+                            0xFFACABAB
+                        ),
+                    )
+                }
+
+                IconButton(
+                    onClick = {
+                        selected.value = Icons.Default.DateRange
+                        navController.navigate(FScreens.Bookings.screens) {
+                            popUpTo(navController.graph.startDestinationId)
+                            launchSingleTop = true
+                        }
+                    },
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Icon(
+                        Icons.Default.DateRange,
+                        contentDescription = null,
+                        modifier = Modifier.size(26.dp),
+                        tint = if (selected.value == Icons.Default.DateRange) Color.White else Color(
+                            0xFFACABAB
+                        ),
+                    )
+                }
+                IconButton(
+                    onClick = {
+                        selected.value = Icons.Default.List
+                        navController.navigate(FScreens.FAQs.screens) {
+                            popUpTo(navController.graph.startDestinationId)
+                            launchSingleTop = true
+                        }
+                    },
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Icon(
+                        Icons.Default.List,
+                        contentDescription = null,
+                        modifier = Modifier.size(26.dp),
+                        tint = if (selected.value == Icons.Default.List) Color.White else Color(
+                            0xFFACABAB
+                        ),
+                    )
+                }
+
+            }
+        },
+    ){paddingValues ->
+        NavHost(
+            navController = navController,
+            startDestination = FScreens.Home.screens,
+            modifier = Modifier.padding(paddingValues)
+        ) {
+            composable(FScreens.Home.screens){ MyApp() }
+            composable(FScreens.Bookings.screens){ BookingHistoryFragment }
+            composable(FScreens.FAQs.screens){ FAQsFragment() }
+        }
+
     }
 }

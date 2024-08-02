@@ -197,29 +197,29 @@ fun BookingPage(location: LocationDataModel, onBookingConfirmed: () -> Unit) {
             // Dose Type Selection
             Text(text = "Select Dose Type")
             Spacer(modifier = Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically){
                 RadioButton(
                     selected = (doseType == "First Dose"),
                     onClick = { doseType = "First Dose" },
-                    modifier = Modifier.weight(1f)
                 )
                 Text(text = "First Dose", modifier = Modifier.padding(start = 5.dp))
-                Spacer(modifier = Modifier.width(16.dp))
+            }
+
+            Row(verticalAlignment = Alignment.CenterVertically){
                 RadioButton(
                     selected = (doseType == "Second Dose"),
                     onClick = { doseType = "Second Dose" },
-                    modifier = Modifier.weight(1f)
                 )
                 Text(text = "Second Dose", modifier = Modifier.padding(start = 5.dp))
-                Spacer(modifier = Modifier.width(16.dp))
+            }
+
+            Row(verticalAlignment = Alignment.CenterVertically){
                 RadioButton(
                     selected = (doseType == "Booster Dose"),
                     onClick = { doseType = "Booster Dose" },
-                    modifier = Modifier.weight(1f)
                 )
                 Text(text = "Booster Dose", modifier = Modifier.padding(start = 5.dp))
             }
-
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
@@ -358,7 +358,6 @@ fun showBookingConfirmationNotification(
         .setAutoCancel(true)
         .build()
 
-    // Log to check if the notification is being triggered
     Log.d("NotificationHelper", "Showing notification: $notification")
 
     // Show the notification

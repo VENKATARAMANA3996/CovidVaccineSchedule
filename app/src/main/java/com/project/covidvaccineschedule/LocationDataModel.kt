@@ -1,6 +1,8 @@
 package com.project.covidvaccineschedule
 
 import android.content.Context
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 data class LocationDataModel (
     val name: String,
@@ -16,56 +18,36 @@ data class BookingDetails(
     val center: String,
     val date: String,
     val time: String
-) {
-    override fun toString(): String {
-        return "$name|$doseType|$center|$date|$time"
-    }
-
-    companion object {
-        fun fromString(string: String): BookingDetails {
-            val parts = string.split("|")
-            return if (parts.size == 5) {
-                BookingDetails(
-                    name = parts[0],
-                    doseType = parts[1],
-                    center = parts[2],
-                    date = parts[3],
-                    time = parts[4]
-                )
-            } else {
-                // Handle the case where the string is not in the expected format
-                // Returning a default or empty BookingDetails instance
-                BookingDetails(
-                    name = "Unknown",
-                    doseType = "Unknown",
-                    center = "Unknown",
-                    date = "Unknown",
-                    time = "Unknown"
-                )
-            }
-        }
-    }
-}
-
-
+)
 
 object SharedPreferencesHelper {
-    private const val PREFS_NAME = "covid_schedule_prefs"
-    private const val BOOKING_HISTORY_KEY = "booking_history"
+    private const val PREFS_NAME = "BookingPrefs"
+    private const val KEY_BOOKING_DETAILS = "booking_details"
 
     fun saveBooking(context: Context, bookingDetails: BookingDetails) {
         val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        val bookings = sharedPreferences.getStringSet(BOOKING_HISTORY_KEY, mutableSetOf()) ?: mutableSetOf()
-        bookings.add(bookingDetails.toString())
-        editor.putStringSet(BOOKING_HISTORY_KEY, bookings)
+
+        // Get existing bookings
+        val gson = Gson()
+        val json = sharedPreferences.getString(KEY_BOOKING_DETAILS, null)
+        val bookingListType = object : TypeToken<MutableList<BookingDetails>>() {}.type
+        val bookingHistory: MutableList<BookingDetails> = gson.fromJson(json, bookingListType) ?: mutableListOf()
+
+        // Add new booking
+        bookingHistory.add(bookingDetails)
+        val updatedJson = gson.toJson(bookingHistory)
+
+        editor.putString(KEY_BOOKING_DETAILS, updatedJson)
         editor.apply()
     }
 
-    fun getBookingHistory(context: Context): Set<BookingDetails> {
+    fun getBookingHistory(context: Context): List<BookingDetails> {
         val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val bookingsStringSet = sharedPreferences.getStringSet(BOOKING_HISTORY_KEY, mutableSetOf()) ?: mutableSetOf()
-        return bookingsStringSet.map { BookingDetails.fromString(it) }.toSet()
+        val json = sharedPreferences.getString(KEY_BOOKING_DETAILS, null)
+        val gson = Gson()
+        val bookingListType = object : TypeToken<MutableList<BookingDetails>>() {}.type
+        return gson.fromJson(json, bookingListType) ?: listOf()
     }
 }
 

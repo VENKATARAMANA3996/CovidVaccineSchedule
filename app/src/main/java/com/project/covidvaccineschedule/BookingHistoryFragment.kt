@@ -1,5 +1,6 @@
 package com.project.covidvaccineschedule
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,7 +33,54 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.covidvaccineschedule.SharedPreferencesHelper.getBookingHistory
 
-class BookingHistoryFragment {
+@Composable
+fun MyBookings() {
+    val context = LocalContext.current
+    val bookingHistory = remember { mutableStateOf(SharedPreferencesHelper.getBookingHistory(context)) }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        if (bookingHistory.value.isEmpty()) {
+            item {
+                Text(
+                    text = "You don't have any bookings",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Gray
+                    ),
+                    textAlign = TextAlign.Center
+                )
+            }
+        } else {
+            items(bookingHistory.value) { booking ->
+                BookingHistoryItem(booking)
+                Log.d("Booking", "MyBookings: " + booking.toString())
+            }
+        }
+    }
+}
+@Composable
+fun BookingHistoryItem(booking: BookingDetails) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .background(Color.LightGray, RoundedCornerShape(8.dp))
+            .padding(16.dp)
+    ) {
+        Text(text = "Name: ${booking.name}", fontWeight = FontWeight.Bold)
+        Text(text = "Dose Type: ${booking.doseType}")
+        Text(text = "Center: ${booking.center}")
+        Text(text = "Date: ${booking.date}")
+        Text(text = "Time: ${booking.time}")
+    }
 }
 
 

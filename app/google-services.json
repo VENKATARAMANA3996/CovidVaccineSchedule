@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "994573465809",
+    "project_id": "covid-vaccine-schedule",
+    "storage_bucket": "covid-vaccine-schedule.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994573465809:android:765b5f79258d4a6fa92df0",
+        "android_client_info": {
+          "package_name": "com.project.covidvaccineschedule"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPLbIB2NzDBW2CHOxYrkvuU71NNiAUUG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
